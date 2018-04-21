@@ -1,3 +1,11 @@
+This is a multicast DNS repeater that has been modified to work on OpenBSD.
+It might have broken Linux compatibility however, but it works for me.
+
+Original source was obtained from
+https://bitbucket.org/geekman/mdns-repeater/src/28ecc2ab9a0e26c73148711c867d9d2b5dafff91
+
+Original readme below:
+
 mdns-repeater
 ==============
 mdns-repeater is a Multicast DNS repeater for Linux. Multicast DNS uses the 
