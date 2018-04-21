@@ -102,7 +102,8 @@ static int create_recv_sock() {
 	}
 
 	// enable loopback in case someone else needs the data
-	if ((r = setsockopt(sd, IPPROTO_IP, IP_MULTICAST_LOOP, &on, sizeof(on))) < 0) {
+        u_char loop=1;
+	if ((r = setsockopt(sd, IPPROTO_IP, IP_MULTICAST_LOOP, &loop, sizeof(loop))) < 0) {
 		log_message(LOG_ERR, "recv setsockopt(IP_MULTICAST_LOOP): %m");
 		return r;
 	}
@@ -181,8 +182,20 @@ static int create_send_sock(int recv_sockfd, const char *ifname, struct if_sock 
 	}
 
 	// enable loopback in case someone else needs the data
-	if ((r = setsockopt(sd, IPPROTO_IP, IP_MULTICAST_LOOP, &on, sizeof(on))) < 0) {
+        u_char loop = 1;
+	if ((r = setsockopt(sd, IPPROTO_IP, IP_MULTICAST_LOOP, &loop, sizeof(loop))) < 0) {
 		log_message(LOG_ERR, "send setsockopt(IP_MULTICAST_LOOP): %m");
+		return r;
+	}
+
+        u_char ttl = 1;
+        if ((r = setsockopt(sd, IPPROTO_IP, IP_MULTICAST_TTL, &ttl, sizeof(ttl))) < 0) {
+		log_message(LOG_ERR, "send setsockopt(IP_MULTICAST_TTL): %m");
+		return r;
+	}
+	
+        if ((r = setsockopt(sd, IPPROTO_IP, IP_MULTICAST_IF, &if_addr->s_addr, sizeof(if_addr->s_addr))) < 0) {
+		log_message(LOG_ERR, "send setsockopt(IP_MULTICAST_IF): %m");
 		return r;
 	}
 
